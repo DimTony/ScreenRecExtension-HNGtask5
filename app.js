@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const path = require("path");
@@ -7,9 +8,9 @@ const { Deepgram } = require("@deepgram/sdk");
 const fs = require("fs");
 const { v4:uuidv4 } = require('uuid');
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
-const deepgramApiKey = "6936e2637d2388b9adcb07a66e411d0ce76cffd3";
+const deepgramApiKey = process.env.DEEPGRAM_API_KEY;
 
 const app = express();
 const command = ffmpeg();
@@ -172,7 +173,14 @@ app.get("/api/getVideo/:id", async (req, res) => {
   
       const stream = fs.createReadStream(videoPath);
   
-      stream.pipe(res);
+      stream.pipe(videoFile);
+
+      return res.status(200).json({
+        status: 'success',
+        video: videoFile
+      });
+
+      
       
     } catch (error) {
       res.json({
