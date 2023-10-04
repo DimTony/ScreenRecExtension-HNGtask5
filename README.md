@@ -94,7 +94,6 @@ Before you begin, ensure you have the following installed:
 
   - Start Video: `POST /api/start`
   - Upload, Concatenate & Transcribe Video: `POST /api/uploadFile`
-  - Stop Video: `POST /api/stop`
   - Retrieve Video Information: `GET /api/getVideo/:id`
 ### Limitations
 
