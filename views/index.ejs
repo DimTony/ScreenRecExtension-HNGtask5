@@ -1,1 +1,26 @@
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Gallery</title>
+</head>
+<body>
+    <h1>Video Gallery</h1>
+    <ul>
+        <% matchedFiles.forEach((match) => { %>
+            <%  if ( match.transcript ) {  %>
+                    <li>
+                        <a href="/<%= `${match.video}` %>"><%= `${match.video}` %></a>
+                    </li>
+                    <li>
+                        <a href="/<%= `${match.transcript}` %>"><%= `${match.transcript}` %></a>
+                    </li>
+            <%    } else { %>
+                  <% console.log ('here'); %>
+            <%    } %>
+            
+       <% }); %>
+    </ul>
+</body>
+</html>
