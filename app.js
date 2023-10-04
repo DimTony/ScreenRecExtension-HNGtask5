@@ -28,6 +28,8 @@ app.use(
   })
 );
 
+app.set('view engine', 'ejs');
+
 let videoId = uuidv4();
 
 let uploadedChunks = [];
@@ -37,6 +39,8 @@ const uploadDir = path.join(__dirname, '/uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
+
+app.use(express.static(path.join(__dirname, 'uploads')));
 
 // Start video Route
 app.post('/api/start',  (req, res) => {
@@ -102,11 +106,11 @@ app.post('/api/uploadFIle', upload.single('myFile'), async (req, res) => {
                     .then((response) => {
                         const transcript = response.results.channels[0].alternatives[0].transcript;
 
-                        const transcriptPath = path.join(uploadDir, `transcript-${videoId}.srt`);
+                        const transcriptPath = path.join(uploadDir, `transcript-${videoId}.txt`);
 
                         fs.promises.writeFile(transcriptPath, transcript, (err) => {
                             if (err) {
-                                console.log('Error writing .srt file:', err)
+                                console.log('Error writing .txt file:', err)
                             } 
                         });
 
@@ -175,6 +179,41 @@ app.get("/api/getVideo/:id", async (req, res) => {
       });
     }
 });
+
+// Get all videos route
+app.get("/", async (req, res) => {
+
+    const vidFiles = [];
+    const transFiles = [];
+
+    const files = fs.readdirSync(uploadDir);
+
+    files.forEach((file) => {
+        const extname = path.extname(file).toLowerCase();
+        if (extname === '.webm') {
+            vidFiles.push(file);
+        }
+        if (extname === '.txt') {
+            transFiles.push(file);
+        }
+    });
+
+    const matchedFiles = vidFiles.map((vidFile) => {
+        
+        
+        const baseName = path.basename(vidFile, path.extname(vidFile));
+        const transcriptFile = `transcript-${baseName}.txt`;
+
+        return {
+            video: vidFile,
+            transcript: transcriptFile,
+        };
+    });
+
+    res.render('index', { matchedFiles });
+
+});
+
 
 const server = app.listen(port, () => {
     console.log('Server is up listening on port:' + port);
