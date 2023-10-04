@@ -15,6 +15,7 @@ This Node.js API allows you to perform video processing tasks, including uploadi
     - [Running the API](#running-the-api)
     - [API Interactions](#api-interactions)
     - [Limitations](#limitations)
+    - [Live URL](#live-url)
   - [7. Contributing](#7-contributing)
 
 ## 1. Features
@@ -93,10 +94,16 @@ Before you begin, ensure you have the following installed:
 
   - Start Video: `POST /api/start`
   - Upload, Concatenate & Transcribe Video: `POST /api/uploadFile`
+  - Stop Video: `POST /api/stop`
   - Retrieve Video Information: `GET /api/getVideo/:id`
 ### Limitations
 
   - A good internet connection is required when running the API as it involves video manipulations.
+
+### Live URL
+
+This API is hosted on Render at the following address:
+[Live URL](https://chrome-api-zzsk.onrender.com)
 
 ## 7. Contributing
 
