@@ -135,35 +135,7 @@ app.post('/api/uploadFIle', upload.single('myFile'), async (req, res) => {
     }
 })
 
-// Stop video route
-app.post('/api/stop', async (req, res) => {
-    try {
-        videoId = req.body.videoId;
 
-        if (uploadedChunks.length === 0 || !videoId) {
-            return res.status(400).json({
-                message: 'No video received'
-            });
-        }
-
-        const receivedChunks = Buffer.concat(uploadedChunks);
-
-        return res.status(200).json({
-            videoId: videoId,
-            videoFile: receivedChunks,
-            transcription: transcript 
-        });
-
-
-
-    } catch (error) {
-        res.status(500).json({
-            status: failed,
-            message: 'Internal Error'
-        });
-    }
-
-})
 
 //Get video route
 app.get("/api/getVideo/:id", async (req, res) => {
