@@ -133,9 +133,7 @@ app.post('/api/uploadFIle', upload.single('myFile'), async (req, res) => {
         });
 
     }
-})
-
-
+});
 
 //Get video route
 app.get("/api/getVideo/:id", async (req, res) => {
