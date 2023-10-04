@@ -8,6 +8,7 @@ const { Deepgram } = require("@deepgram/sdk");
 const fs = require("fs");
 const { v4:uuidv4 } = require('uuid');
 
+
 const port = process.env.PORT || 3000;
 
 const deepgramApiKey = process.env.DEEPGRAM_API_KEY;
@@ -166,21 +167,34 @@ app.post('/api/stop', async (req, res) => {
 
 //Get video route
 app.get("/api/getVideo/:id", async (req, res) => {
+    
     try {
+    
       const videoId = req.params.id;
       
       const videoPath = path.join(uploadDir, `${videoId}.webm`);
-  
-      const stream = fs.createReadStream(videoPath);
-  
-      stream.pipe(videoFile);
-
-      return res.status(200).json({
-        status: 'success',
-        video: videoFile
-      });
-
+      const transcriptPath = path.join(uploadDir, `transcript-${videoId}.srt`);
       
+
+      if (fs.existsSync(videoPath) && fs.existsSync(transcriptPath)) {
+       
+        const contentType = 'video/mp4';
+
+        res.setHeader('Content-Type', contentType);
+
+        const videoStream = fs.createReadStream(videoPath);
+        
+
+        videoStream.pipe(res);
+
+        videoStream.on('error', (error) => {
+            console.error('Error reading video file:', error);
+            res.status(500).send('Internal Server Error');
+        });
+
+      } else {
+        res.status(404).send('Video not found');
+      }  
       
     } catch (error) {
       res.json({
