@@ -70,9 +70,11 @@ app.post('/api/uploadFIle', upload.single('myFile'), async (req, res) => {
 
         await uploadedChunks.push(req.file.buffer);
 
+        const finalVideo = Buffer.concat(uploadedChunks);
+
         const videoPath = path.join(uploadDir, `${videoId}.webm`);
 
-        await fs.promises.writeFile(videoPath, uploadedChunks);
+        await fs.promises.writeFile(videoPath, finalVideo);
 
         const audioPath = path.join(uploadDir, `audio-${videoId}.mp3`);
 
